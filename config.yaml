@@ -1,0 +1,75 @@
+# AI Sports Companion 配置文件
+# 支持环境变量引用: ${VAR_NAME}
+
+# LLM 配置
+llm:
+  provider: openai                    # openai / anthropic / ollama
+  model: gpt-4o-mini                  # 模型名称
+  api_key: ${OPENAI_API_KEY}          # 从环境变量读取
+  base_url: null                      # 可选，自定义 API 地址
+  temperature: 0.7                    # 创造性 vs 确定性
+  max_tokens: 2048
+
+# 数据源配置
+data_sources:
+  pandascore:
+    enabled: true
+    api_key: ${PANDASCORE_API_KEY}
+    base_url: https://api.pandascore.co
+    free_tier: true                   # 免费版: 1000 req/h, 赛程+基础数据
+    timeout: 10
+    
+  football_api:
+    enabled: true
+    api_key: ${FOOTBALL_API_KEY}
+    base_url: https://v3.football.api-sports.io
+    free_tier: true                   # 免费版: 100 req/day
+    timeout: 10
+    
+  thesportsdb:
+    enabled: true
+    api_key: ${THESPORTSDB_API_KEY}
+    base_url: https://www.thesportsdb.com/api/v1/json
+    free_tier: true                   # 完全免费
+    timeout: 10
+
+# 语音配置
+voice:
+  input_enabled: false                # 语音输入（需麦克风）
+  output_enabled: true                # 语音播报
+  tts_engine: edge_tts                # edge_tts / gtts / pyttsx3
+  language: zh-CN                     # 播报语言
+  speed: "+0%"                        # 语速调整
+
+# 硬件配置（预留接口）
+hardware:
+  enabled: false
+  led_pin: 18                         # GPIO 引脚 (Raspberry Pi)
+  screen_type: null                   # e-paper / lcd / null
+  screen_resolution: [400, 300]       # 屏幕分辨率
+  button_pins: [17, 27, 22]          # 按钮 GPIO 引脚
+
+# 监控任务配置
+monitor:
+  check_interval: 300                 # 比赛状态检查间隔 (秒)
+  pre_match_notify: 600               # 赛前提醒时间 (秒)
+  score_update_interval: 60           # 比分更新间隔 (秒)
+
+# 用户偏好默认值
+user_defaults:
+  favorite_teams: []                  # 默认关注队伍
+  favorite_games:                     # 默认关注赛事类型
+    - "League of Legends"
+    - "CS2"
+    - "足球"
+    - "篮球"
+  quiet_hours: "00:00-08:00"          # 默认勿扰时段
+  notification_style: normal          # aggressive / normal / silent
+  language: zh-CN
+
+# 系统配置
+system:
+  debug: false
+  log_level: INFO
+  database_path: ./data/memory.db     # SQLite 数据库路径
+  max_history_rounds: 20              # 对话历史保留轮数
